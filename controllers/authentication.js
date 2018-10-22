@@ -11,6 +11,14 @@ function tokenForUser(user) {
   },config.secret);
 }
 
+exports.signin = function(req, res, next) {
+  // user already has their email and password authd
+  // we just need to give them a token
+  res.send({token: tokenForUser(req.user)})
+  
+}
+
+
 exports.signup = function(req, res, next) {
   const email = req.body.email;
   const password = req.body.password;
@@ -19,8 +27,6 @@ exports.signup = function(req, res, next) {
   if (!email|| !password) {
     return res.status(422).send({error:"You mut provide email and password"});
   }
-
-
   //see if a user with the give email exists
   User.findOne({ email }, function(err, existingUser) {
     if (err) {
